@@ -54,7 +54,7 @@
 
         ";
 
-        return $app['twig']->render('tasks.php');
+        return $app['twig']->render('tasks.php', array('tasks'=> Task::getAll()));
 
     });
 
