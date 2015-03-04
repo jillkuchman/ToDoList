@@ -15,16 +15,39 @@
 
 
         $output = "";
-        foreach(Task::getAll() as $task) {
-            $output = $output . "<p>" . $task->getDescription() . "</p>";
+
+        $list_tasks = Task::getAll();
+
+        if (!empty($list_tasks)) {
+            $output .= "
+            <h1>To Do List</h1>
+            <p>Here are your tasks</p>
+            <ul>";
+
+            foreach ($list_tasks as $task)
+            {
+                $output .= "<p>" . $task->getDescription() . "</p>";
+            }
+
+            $output .= "</ul>";
+
         }
 
-        $output = $output . "</ul>
+
+        $output .= "</ul>
             <form action='/tasks' method='post'>
                 <label for='description'>Task Description</label>
                 <input id='description' name='description' type='text'>
                 <button type='submit'>Add task</button>
             </form>
+        ";
+
+        $output .= "
+
+        <form action='/delete_tasks' method='post'>
+        <button type='submit'>Clear List</button>
+        </form>
+
         ";
 
         return $output;
@@ -41,6 +64,17 @@
             <p><a href='/'>View your list of things to do.</a></p>
         ";
 
+    });
+
+    $app->post("/delete_tasks", function() {
+
+        Task::deleteAll();
+
+        return
+        "
+            <h1>List Cleared!</h1>
+            <p><a href='/'>Home</a></p>
+        ";
     });
 
     return $app;
